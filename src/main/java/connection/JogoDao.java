@@ -15,7 +15,7 @@ public class JogoDao {
     }
 
     public void salvar() {
-        Jogador jogador = new Jogador("Joao");
+        Jogador jogador = new Jogador("Pedro");
         String sql = "INSERT INTO jogador (nome)" +
                 "VALUES (?)";
 
