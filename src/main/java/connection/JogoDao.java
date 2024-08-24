@@ -14,8 +14,8 @@ public class JogoDao {
         this.conn = connection;
     }
 
-    public void salvar() {
-        Jogador jogador = new Jogador("Pedro");
+    public void salvar(Jogador jogador) {
+
         String sql = "INSERT INTO jogador (nome)" +
                 "VALUES (?)";
 
