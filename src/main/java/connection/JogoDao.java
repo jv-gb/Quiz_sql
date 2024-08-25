@@ -4,6 +4,7 @@ import jogo.Jogador;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JogoDao {
@@ -19,7 +20,6 @@ public class JogoDao {
         String sql = "INSERT INTO jogador (nome)" +
                 "VALUES (?)";
 
-
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = conn.prepareStatement(sql);
@@ -31,8 +31,26 @@ public class JogoDao {
 
             throw new RuntimeException(e);
         }
-
-
     }
 
+    public void visualizarPerguntas() {
+
+        String sql = "SELECT * FROM perguntas";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String pergunta = resultSet.getString("pergunta");
+                String resposta = resultSet.getString("resposta");
+
+                System.out.println("Pergunta: " + pergunta + ", Resposta: " + resposta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 }
