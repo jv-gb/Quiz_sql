@@ -71,27 +71,15 @@ public class TelaJogo extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-        // Botão de verificar resposta
-        JButton verificarButton = new JButton("Verificar Resposta");
-        verificarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         // Botão de próxima pergunta
-        JButton nextButton = new JButton("Próxima Pergunta ➡️");
-        nextButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton confirmar = new JButton("Confirmar ➡️");
+        confirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Adicionar ações aos botões
-        verificarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (correctOption.isSelected()) {
-                    JOptionPane.showMessageDialog(TelaJogo.this, "Resposta Correta!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(TelaJogo.this, "Resposta Errada. Tente novamente!", "Resultado", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
 
-        nextButton.addActionListener(new ActionListener() {
+        //adiciona açao ao botao
+        confirmar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(TelaJogo.this, "Carregando próxima pergunta...", "Próxima Pergunta", JOptionPane.INFORMATION_MESSAGE);
@@ -100,8 +88,7 @@ public class TelaJogo extends JFrame {
         });
 
         // Adicionar botões ao painel de botões
-        buttonPanel.add(verificarButton);
-        buttonPanel.add(nextButton);
+        buttonPanel.add(confirmar);
 
         // Adicionar painel de botões ao painel principal
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
