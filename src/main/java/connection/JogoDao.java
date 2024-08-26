@@ -52,20 +52,26 @@ public class JogoDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-
                 List<Resposta> respostas = new ArrayList<>();
-
                 String pergunta = resultSet.getString("pergunta.Texto_pergunta");
 
+                // Coleta as quatro respostas referentes à pergunta atual
                 for (int i = 0; i < 4; i++) {
-                    Resposta resposta = new Resposta(resultSet.getString("resposta.Texto_Resposta"), resultSet.getBoolean("resposta.correta"));
-
+                    Resposta resposta = new Resposta(resultSet.getString("resposta.Texto_Resposta"),
+                            resultSet.getBoolean("resposta.correta"));
                     respostas.add(resposta);
-                    resultSet.next();
+
+                    // Somente avança para o próximo registro se não for a última resposta
+                    if (i < 3) {
+                        resultSet.next();
+                    }
                 }
 
-                Collections.shuffle(respostas); // Embaralha as respostas
-                jogos.add(new Jogo(pergunta,respostas));
+                // Embaralha as respostas para adicionar um elemento de aleatoriedade
+                Collections.shuffle(respostas);
+
+                // Cria um novo Jogo com a pergunta e suas respostas, e adiciona à lista de jogos
+                jogos.add(new Jogo(pergunta, respostas));
             }
 
         } catch (SQLException e) {
