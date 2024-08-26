@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import connection.JogoDao;
+import jogo.Resposta;
 
 public class JogoDao {
 
@@ -40,7 +41,7 @@ public class JogoDao {
 
     public List<Jogo> visualizarPerguntas() {
 
-        String sql = "SELECT DISTINCT pergunta.Texto_pergunta, resposta.Texto_Resposta FROM pergunta\n" +
+        String sql = "SELECT DISTINCT pergunta.Texto_pergunta, resposta.Texto_Resposta,resposta.correta FROM pergunta\n" +
                 "join resposta\n" +
                 "on pergunta.ID_pergunta = resposta.ID_pergunta;";
 
@@ -52,12 +53,12 @@ public class JogoDao {
 
             while (resultSet.next()) {
 
-                List<String> respostas = new ArrayList<>();
+                List<Resposta> respostas = new ArrayList<>();
 
                 String pergunta = resultSet.getString("pergunta.Texto_pergunta");
 
                 for (int i = 0; i < 4; i++) {
-                    String resposta = resultSet.getString("resposta.Texto_Resposta");
+                    Resposta resposta = new Resposta(resultSet.getString("resposta.Texto_Resposta"), resultSet.getBoolean("resposta.correta"));
 
                     respostas.add(resposta);
                     resultSet.next();

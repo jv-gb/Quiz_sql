@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Jogo {
     String pergunta;
-    List<String> respostas;
+    List<Resposta> respostas;
 
-    public Jogo(String pergunta, List<String> respostas) {
+    public Jogo(String pergunta, List<Resposta> respostas) {
         this.pergunta = pergunta;
         this.respostas = respostas;
     }
