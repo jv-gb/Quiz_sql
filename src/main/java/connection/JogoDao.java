@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import connection.JogoDao;
 
@@ -38,13 +38,13 @@ public class JogoDao {
         }
     }
 
-    public Set<Jogo> visualizarPerguntas() {
+    public List<Jogo> visualizarPerguntas() {
 
         String sql = "SELECT DISTINCT pergunta.Texto_pergunta, resposta.Texto_Resposta FROM pergunta\n" +
                 "join resposta\n" +
                 "on pergunta.ID_pergunta = resposta.ID_pergunta;";
 
-        Set<Jogo> jogos = new HashSet<>();
+        List<Jogo> jogos = new ArrayList<>();
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -52,23 +52,32 @@ public class JogoDao {
 
             while (resultSet.next()) {
 
-                String[] respostas = new String[4];
+                List<String> respostas = new ArrayList<>();
 
                 String pergunta = resultSet.getString("pergunta.Texto_pergunta");
 
                 for (int i = 0; i < 4; i++) {
                     String resposta = resultSet.getString("resposta.Texto_Resposta");
 
-                    respostas[i] = resposta;
+                    respostas.add(resposta);
                     resultSet.next();
                 }
-                jogos.add(new Jogo(pergunta, respostas));
+
+                Collections.shuffle(respostas); // Embaralha as respostas
+                jogos.add(new Jogo(pergunta,respostas));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        jogos.forEach(System.out::println);
+
+        Collections.shuffle(jogos);
+        List<Jogo> subList = jogos.stream()
+                .limit(10)
+                .collect(Collectors.toList());
+
+        subList.forEach(System.out::println);
         return jogos;
     }
+
 }

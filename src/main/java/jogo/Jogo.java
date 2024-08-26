@@ -1,12 +1,13 @@
 package jogo;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Jogo {
     String pergunta;
-    String[] respostas;
+    List<String> respostas;
 
-    public Jogo(String pergunta, String[] respostas) {
+    public Jogo(String pergunta, List<String> respostas) {
         this.pergunta = pergunta;
         this.respostas = respostas;
     }
@@ -15,7 +16,7 @@ public class Jogo {
     public String toString() {
         return "Jogo{" +
                 "pergunta='" + pergunta + '\'' +
-                ", respostas=" + Arrays.toString(respostas) +
+                ", respostas=" + respostas +
                 '}';
     }
 }
