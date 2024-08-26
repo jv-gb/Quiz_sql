@@ -1,13 +1,32 @@
 package view;
 
+import connection.ConnectionFactory;
+import connection.JogoDao;
+import jogo.Jogo;
+import jogo.Resposta;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.util.List;
 
 public class TelaJogo extends JFrame {
+    private JogoDao jogoDao;
+    private List<Jogo> perguntas;
+    private int perguntaAtual = 0;
+    private JRadioButton[] opcoes;
+    private JLabel questionLabel;
+    private ButtonGroup group;
 
     public TelaJogo() {
+        // Inicializa a conexão e carrega as perguntas
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        Connection connection = connectionFactory.recuperarConexao();
+        jogoDao = new JogoDao(connection);
+        perguntas = jogoDao.visualizarPerguntas();
+
         // Configurações da janela
         setTitle("Jogo - Perguntas e Respostas");
         setSize(500, 400);
@@ -29,7 +48,7 @@ public class TelaJogo extends JFrame {
         questionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Pergunta numerada
-        JLabel questionLabel = new JLabel("1. O que significa a sigla SQL?", JLabel.CENTER);
+        questionLabel = new JLabel("", JLabel.CENTER);
         questionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         questionPanel.add(questionLabel);
@@ -37,32 +56,16 @@ public class TelaJogo extends JFrame {
         // Espaçamento entre a pergunta e as respostas
         questionPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Grupo de botões de radio para as respostas
-        ButtonGroup group = new ButtonGroup();
+        // Grupo de botões de rádio para as respostas
+        group = new ButtonGroup();
+        opcoes = new JRadioButton[4];
 
-        // Respostas
-        JRadioButton option1 = new JRadioButton("Structured Question List.");
-        JRadioButton option2 = new JRadioButton("Simple Query Language.");
-        JRadioButton option3 = new JRadioButton("Sequential Query List.");
-        JRadioButton correctOption = new JRadioButton("Structured Query Language.");
-
-        // Centralizar opções de resposta
-        option1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        option2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        option3.setAlignmentX(Component.CENTER_ALIGNMENT);
-        correctOption.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Adicionar opções ao grupo de botões
-        group.add(option1);
-        group.add(option2);
-        group.add(option3);
-        group.add(correctOption);
-
-        // Adicionar as opções ao painel de perguntas
-        questionPanel.add(option1);
-        questionPanel.add(option2);
-        questionPanel.add(option3);
-        questionPanel.add(correctOption);
+        for (int i = 0; i < opcoes.length; i++) {
+            opcoes[i] = new JRadioButton();
+            opcoes[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+            group.add(opcoes[i]);
+            questionPanel.add(opcoes[i]);
+        }
 
         // Adicionar painel de perguntas ao centro do painel principal
         mainPanel.add(questionPanel, BorderLayout.CENTER);
@@ -71,23 +74,19 @@ public class TelaJogo extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-
-
-        // Botão de próxima pergunta
+        // Botão de confirmar resposta
         JButton confirmar = new JButton("Confirmar ➡️");
         confirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-
-        //adiciona açao ao botao
+        // Adiciona ação ao botão
         confirmar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(TelaJogo.this, "Carregando próxima pergunta...", "Próxima Pergunta", JOptionPane.INFORMATION_MESSAGE);
-                // Aqui você pode implementar a lógica para carregar a próxima pergunta
+                verificarResposta();
             }
         });
 
-        // Adicionar botões ao painel de botões
+        // Adicionar botão ao painel de botões
         buttonPanel.add(confirmar);
 
         // Adicionar painel de botões ao painel principal
@@ -95,6 +94,43 @@ public class TelaJogo extends JFrame {
 
         // Adicionar painel principal à janela
         add(mainPanel);
+
+        // Carrega a primeira pergunta
+        carregarPergunta();
+    }
+
+    private void carregarPergunta() {
+        if (perguntaAtual < perguntas.size()) {
+            Jogo jogo = perguntas.get(perguntaAtual);
+            questionLabel.setText((perguntaAtual + 1) + ". " + jogo.pergunta);
+            List<Resposta> respostas = jogo.respostas;
+
+            for (int i = 0; i < opcoes.length; i++) {
+                opcoes[i].setText(respostas.get(i).resposta);
+                opcoes[i].putClientProperty("correta", respostas.get(i).correta);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Fim do jogo!", "Fim", JOptionPane.INFORMATION_MESSAGE);
+            dispose(); // Fecha a janela quando o jogo termina
+        }
+    }
+
+    private void verificarResposta() {
+        for (JRadioButton opcao : opcoes) {
+            if (opcao.isSelected()) {
+                boolean correta = (boolean) opcao.getClientProperty("correta");
+                if (correta) {
+                    JOptionPane.showMessageDialog(this, "Resposta correta!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Resposta incorreta!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                }
+                break;
+            }
+        }
+
+        // Avança para a próxima pergunta
+        perguntaAtual++;
+        carregarPergunta();
     }
 
     public static void main(String[] args) {

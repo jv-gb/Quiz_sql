@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import connection.JogoDao;
+
 import jogo.Resposta;
 
 public class JogoDao {
