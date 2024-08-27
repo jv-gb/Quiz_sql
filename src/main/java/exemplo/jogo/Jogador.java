@@ -1,5 +1,6 @@
-package jogo;
-import connection.ConnectionFactory;
+package exemplo.jogo;
+
+import exemplo.connection.ConnectionFactory;
 
 public class Jogador {
      public String nome;

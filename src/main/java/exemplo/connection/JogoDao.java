@@ -1,17 +1,18 @@
-package connection;
+package exemplo.connection;
 
-import jogo.Jogador;
-import jogo.Jogo;
+
+import exemplo.jogo.Jogador;
+import exemplo.jogo.Jogo;
+import exemplo.jogo.Resposta;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
-
-
-import jogo.Resposta;
 
 public class JogoDao {
 

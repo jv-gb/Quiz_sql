@@ -1,4 +1,4 @@
-package jogo;
+package exemplo.jogo;
 
 public class Resposta {
     public String resposta;

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:c="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - MySQL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Pergunta sobre MySQL</h1>
+    <c:forEach var="jogo" items="${perguntas}">
+        <p>${jogo.pergunta}</p>
+
+        <form>
+            <c:forEach var="resposta" items="${jogo.respostas}">
+                <label class="option">
+                    <input type="radio" name="alternativa" value="${resposta.resposta}">
+                    ${resposta.resposta}
+                </label>
+            </c:forEach>
+
+            <button type="submit" class="btn">Enviar</button>
+        </form>
+    </c:forEach>
+</div>
+<script>
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+        });
+    });
+</script>
+</body>
+</html>
