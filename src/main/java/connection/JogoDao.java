@@ -45,7 +45,7 @@ public class JogoDao {
                 "join resposta\n" +
                 "on pergunta.ID_pergunta = resposta.ID_pergunta;";
 
-        List<Jogo> jogos = new ArrayList<>();
+        List<Jogo> perguntas = new ArrayList<>();
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -70,21 +70,21 @@ public class JogoDao {
                 // Embaralha as respostas para adicionar um elemento de aleatoriedade
                 Collections.shuffle(respostas);
 
-                // Cria um novo Jogo com a pergunta e suas respostas, e adiciona à lista de jogos
-                jogos.add(new Jogo(pergunta, respostas));
+                // Cria um novo Jogo com a pergunta e suas respostas, e adiciona à lista de perguntas
+                perguntas.add(new Jogo(pergunta, respostas));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        Collections.shuffle(jogos);
-        List<Jogo> subList = jogos.stream()
+        Collections.shuffle(perguntas);
+        List<Jogo> dezperguntas = perguntas.stream()
                 .limit(10)
                 .collect(Collectors.toList());
 
-        subList.forEach(System.out::println);
-        return jogos;
+        dezperguntas.forEach(System.out::println);
+        return dezperguntas;
     }
 
 }
